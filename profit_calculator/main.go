@@ -9,24 +9,20 @@ Returns EBT, profit and the ratio*/
 
 func main() {
 
-	revenue, expenses, taxRate := getInputFromTerminal()
+	revenue := getFloatFromTerminal("Revenue: ")
+	expenses := getFloatFromTerminal("Expenses: ")
+	taxRate := getFloatFromTerminal("Tax Rate: ")
 
 	earningBeforeTax, earningAfterTax, ratio := calculateOutput(revenue, expenses, taxRate)
 
-	fmt.Printf("Earning before tax: %v\nProfit: %v\nRation: %v", earningBeforeTax, earningAfterTax, ratio)
+	fmt.Printf("Earning before tax: %v\nProfit: %v\nRation: %.02f", earningBeforeTax, earningAfterTax, ratio)
 }
 
-func getInputFromTerminal() (revenue, expenses, taxRate float32) {
-
-	fmt.Print("Revenue: ")
-	fmt.Scan(&revenue)
-
-	fmt.Print("Expenses: ")
-	fmt.Scan(&expenses)
-
-	fmt.Print("Tax rate: ")
-	fmt.Scan(&taxRate)
-	return
+func getFloatFromTerminal(text string) float32 {
+	var variable float32
+	fmt.Print(text)
+	fmt.Scan(&variable)
+	return variable
 }
 
 func calculateOutput(revenue, expenses, taxRate float32) (float32, float32, float32) {
@@ -34,5 +30,5 @@ func calculateOutput(revenue, expenses, taxRate float32) (float32, float32, floa
 	earningAfterTax := earningBeforeTax * (1 - (taxRate / 100))
 	ratio := earningBeforeTax / earningAfterTax
 
-	return earningAfterTax, earningBeforeTax, ratio
+	return earningBeforeTax, earningAfterTax, ratio
 }
