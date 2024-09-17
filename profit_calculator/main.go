@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 /*
 A program that asks for revenue, expenses and tax rate
@@ -9,20 +12,33 @@ Returns EBT, profit and the ratio*/
 
 func main() {
 
-	revenue := getFloatFromTerminal("Revenue: ")
-	expenses := getFloatFromTerminal("Expenses: ")
-	taxRate := getFloatFromTerminal("Tax Rate: ")
+	revenue, err := getFloatFromTerminal("Revenue")
+	if err != nil {
+		panic(err)
+	}
+	expenses, err := getFloatFromTerminal("Expenses")
+	if err != nil {
+		panic(err)
+	}
+	taxRate, err := getFloatFromTerminal("Tax Rate")
+	if err != nil {
+		panic(err)
+	}
 
 	earningBeforeTax, earningAfterTax, ratio := calculateOutput(revenue, expenses, taxRate)
 
 	fmt.Printf("Earning before tax: %v\nProfit: %v\nRation: %.02f", earningBeforeTax, earningAfterTax, ratio)
 }
 
-func getFloatFromTerminal(text string) float32 {
+func getFloatFromTerminal(text string) (float32, error) {
 	var variable float32
-	fmt.Print(text)
-	fmt.Scan(&variable)
-	return variable
+	fmt.Print(text + ": ")
+	_, err := fmt.Scan(&variable)
+
+	if variable <= 0 {
+		return 0, errors.New("inupt must be greater then zero")
+	}
+	return variable, err
 }
 
 func calculateOutput(revenue, expenses, taxRate float32) (float32, float32, float32) {
