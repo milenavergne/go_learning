@@ -3,6 +3,8 @@ package main
 import (
 	"errors"
 	"fmt"
+	"os"
+	"strings"
 )
 
 /*
@@ -28,6 +30,11 @@ func main() {
 	earningBeforeTax, earningAfterTax, ratio := calculateOutput(revenue, expenses, taxRate)
 
 	fmt.Printf("Earning before tax: %v\nProfit: %v\nRation: %.02f", earningBeforeTax, earningAfterTax, ratio)
+	saveValuesInFile("profitCalculator.txt",
+		map[string]float32{
+			"earningBeforeTax": earningBeforeTax,
+			"Profit":           earningAfterTax,
+			"ratio":            ratio})
 }
 
 func getFloatFromTerminal(text string) (float32, error) {
@@ -47,4 +54,14 @@ func calculateOutput(revenue, expenses, taxRate float32) (float32, float32, floa
 	ratio := earningBeforeTax / earningAfterTax
 
 	return earningBeforeTax, earningAfterTax, ratio
+}
+
+func saveValuesInFile(fileName string, valueMap map[string]float32) {
+	var builder strings.Builder
+	for key, value := range valueMap {
+		line := fmt.Sprintf("%s: %.2f, ", key, value)
+		builder.WriteString(line)
+	}
+	builder.WriteString("\n")
+	os.WriteFile(fileName, []byte(builder.String()), 0644)
 }
